@@ -1,19 +1,27 @@
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 cmake_minimum_required(VERSION 3.25)
-
 project(cgame-glfw)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Find OpenGL
 find_package(OpenGL REQUIRED)
 
-include_directories(./libs/glfw/include/ ./libs/glad/include/ ./libs/linmath.h/)
+# Set Include Paths
+set(GLFW_DIR "${CMAKE_SOURCE_DIR}/libs/glfw")
+set(GLAD_DIR "${CMAKE_SOURCE_DIR}/libs/glad")
+set(LINMATH_DIR "${CMAKE_SOURCE_DIR}/libs/linmath.h")
 
-include_directories(${GLFW3_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
+# Define Executable
+add_executable(cgame src/main.c)
 
-add_library(glad ./libs/glad/src/gl.c)
+# Create glad Library
+add_library(glad ${GLAD_DIR}/src/gl.c)
+target_include_directories(glad PUBLIC ${GLAD_DIR}/include)
 
-add_executable(cgame src/main.c ./libs/glad/src/gl.c)
+# Set Include Directories for Executable
+target_include_directories(cgame PRIVATE ${GLFW_DIR}/include ${LINMATH_DIR})
 
-set(GLFW3_LIBRARIES /home/john/dev/projects/cgame-glfw/libs/glfw/build/src/libglfw3.a)
-target_link_libraries(cgame ${GLFW3_LIBRARIES} ${OPENGL_LIBRARIES} glad m)
+# Link Dependencies
+target_link_directories(cgame PRIVATE ${GLFW_DIR}/build/src)
+target_link_libraries(cgame PRIVATE glfw3 OpenGL::GL glad m)
 
