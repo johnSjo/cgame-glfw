@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
+
+#include <gfxlib.h>
  
 typedef struct Vertex
 {
@@ -158,5 +160,7 @@ int main(void)
     glfwDestroyWindow(window);
  
     glfwTerminate();
+    dummy();
     exit(EXIT_SUCCESS);
+    
 }
